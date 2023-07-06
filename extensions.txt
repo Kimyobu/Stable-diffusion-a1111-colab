@@ -1,0 +1,2 @@
+https://github.com/Mikubill/sd-webui-controlnet.git
+https://github.com/yfszzx/stable-diffusion-webui-images-browser.git
