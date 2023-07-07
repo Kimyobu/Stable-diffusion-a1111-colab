@@ -1,3 +1,5 @@
 https://github.com/Mikubill/sd-webui-controlnet.git
 https://github.com/yfszzx/stable-diffusion-webui-images-browser.git
 https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git
+https://github.com/fkunn1326/openpose-editor.git
+https://github.com/adieyal/sd-dynamic-prompts.git
