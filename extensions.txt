@@ -1,2 +1,3 @@
 https://github.com/Mikubill/sd-webui-controlnet.git
 https://github.com/yfszzx/stable-diffusion-webui-images-browser.git
+https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git
