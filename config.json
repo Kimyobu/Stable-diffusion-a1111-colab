@@ -70,7 +70,7 @@
     "training_enable_tensorboard": false,
     "training_tensorboard_save_images": false,
     "training_tensorboard_flush_every": 120,
-    "sd_model_checkpoint": "curiousmerge25D_v50V4V2.safetensors [a814e01389]",
+    "sd_model_checkpoint": "",
     "sd_checkpoint_cache": 0,
     "sd_vae_checkpoint_cache": 0,
     "sd_vae": "Automatic",
@@ -177,5 +177,5 @@
     "disabled_extensions": [],
     "disable_all_extensions": "none",
     "restore_config_state_file": "",
-    "sd_checkpoint_hash": "a814e01389f0387f0802a2e7eb86a3f62e3b4a2747389193e0ff468fd9b8fc5d"
+    "sd_checkpoint_hash": ""
 }
