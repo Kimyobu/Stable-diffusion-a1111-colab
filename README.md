@@ -1,9 +1,9 @@
 # Stable-diffusion-colab
 
-Stable diffusion WebUI
-<br>Runtime Storage
+Stable diffusion WebUI<br>
+Runtime Storage<br>
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kimyobu/Stable-diffusion-a1111-colab/blob/main/colab.ipynb)
-<br>Drive Storage
+Drive Storage<br>
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kimyobu/Stable-diffusion-a1111-colab/blob/main/drive.ipynb)
 
 DragGAN<br>
