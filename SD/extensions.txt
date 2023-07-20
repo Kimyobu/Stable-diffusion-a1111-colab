@@ -6,3 +6,4 @@ https://github.com/adieyal/sd-dynamic-prompts.git
 https://github.com/DominikDoom/a1111-sd-webui-tagcomplete.git
 https://github.com/thomasasfk/sd-webui-aspect-ratio-helper.git
 https://github.com/hako-mikan/sd-webui-supermerger.git
+https://github.com/huchenlei/sd-webui-openpose-editor.git
