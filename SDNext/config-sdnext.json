@@ -263,7 +263,7 @@
   "sd_hypernetwork": "None",
   "disabled_extensions": [],
   "disable_all_extensions": "none",
-  "sd_checkpoint_hash": "ffd43b5a21ddd2664fe72d6472bf646409018ca92b2d8dfe2212c0d09eecd61a",
+  "sd_checkpoint_hash": "",
   "clip_skip": 1,
   "uni_pc_lower_order_final": true,
   "uni_pc_order": 2,
