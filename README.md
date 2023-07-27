@@ -13,4 +13,4 @@ DragGAN<br>
 
 SDNext<br>
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kimyobu/Stable-diffusion-a1111-colab/blob/main/SDNext_Colab.ipynb) Colab<br>
-??Drive??
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kimyobu/Stable-diffusion-a1111-colab/blob/main/SDNext_Drive.ipynb) Drive
