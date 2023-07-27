@@ -1,0 +1,6 @@
+{
+  "txt2img/Sampling method/value": "Euler a",
+  "txt2img/Batch/value": true,
+  "txt2img/Seed details/value": true,
+  "txt2img/Advanced/value": true
+}
