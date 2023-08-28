@@ -17,7 +17,7 @@ def arg(default):
     return gr.Textbox(default,lines=1,max_lines=1,placeholder='Place your commandline args here...')
 
 def a1111_click(args,option):
-    A1111.App(args=arg)
+    A1111.App(args=args)
     return 'Started A1111'
 
 with gr.Blocks(theme='darkdefault',css=css) as ui:
