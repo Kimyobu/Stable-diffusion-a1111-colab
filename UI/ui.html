@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+</head>
+<style>
+    html {
+        padding-top: 10px;
+    }
+
+    .la {
+        width: auto;
+        height: auto;
+        position: fixed;
+        right: 0;
+        margin-right: 15px;
+        font-size: large;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .row {
+        margin-left: 10px;
+        border: 1px solid;
+        padding: 10px;
+    }
+
+    .dynamic-input {
+        width: 600px;
+        font-size: 14px;
+    }
+</style>
+
+<body>
+    <script src="./script.js"></script>
+    <script>
+        function resizeInput(input) {
+            const textLength = input.value.length;
+            if (textLength >= 720 && textLength <= 600) {
+                input.style.width = textLength * 8 + 'px';
+            }
+        }
+    </script>
+    <div class="main">
+        <div class="row" style="text-align: center;background-color: red;">
+            !!! มันยังกากๆอยู่นะครับใครช่วยได้ Pull Request มาเลยครับ !!!
+        </div>
+        
+    </div>
+</body>
+
+</html>
