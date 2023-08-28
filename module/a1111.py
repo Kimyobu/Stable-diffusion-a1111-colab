@@ -10,7 +10,7 @@ class App:
             if not os.path.isdir('/content/drive'):
                 print('Mounting Drive...')
                 drive.mount('/content/drive', force_remount=True)
-            WORKSPACE = '/content/drive/MyDrive/'
+            WORKSPACE = '/content/drive/MyDrive/kim-colab/A1111'
         def run():
             return py(f'{WORKSPACE}/launch.py')
         threading.Thread(target=run)
