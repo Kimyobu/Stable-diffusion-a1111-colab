@@ -50,4 +50,7 @@ def start():
 
 ui.startup_events = start
 
-ui.launch(debug=True,share=True,show_error=True)
+try:
+    ui.launch(debug=True,share=True,show_error=True)
+except Exception as error:
+    print(error)
