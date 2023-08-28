@@ -1,8 +1,13 @@
 import gradio as gr
-import module.a1111 as A1111
+import os
+import subprocess
+import sys
 
-# css = open('/content/ui.css')
-css = '.dr {align-content: center;}'
+def run(cmd:str):
+    return subprocess.run(cmd.split(' '))
+
+def py(cmd:str):
+    return run(f'{sys.executable} {cmd}')
 
 def op(choices=[],value=[]):
     return gr.CheckboxGroup(['Use Google Drive']+choices,value=[True]+value)
@@ -17,10 +22,10 @@ def arg(default):
     return gr.Textbox(default,lines=1,max_lines=1,placeholder='Place your commandline args here...')
 
 def a1111_click(args,option):
-    A1111.App(args=args)
+    py('/content/A1111/launch.py')
     return 'Started A1111'
 
-with gr.Blocks(theme='darkdefault',css=css) as ui:
+with gr.Blocks() as ui:
     status = gr.Text(label='Status',interactive=False)
     with gr.Tab('WebUi Launcher'):
         with gr.Row():
@@ -50,7 +55,4 @@ def start():
 
 ui.startup_events = start
 
-try:
-    ui.launch(debug=True,share=True,show_error=True)
-except Exception as error:
-    print(error)
+ui.launch(debug=True,share=True,show_error=True)
