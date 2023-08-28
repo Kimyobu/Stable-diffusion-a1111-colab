@@ -1,7 +1,7 @@
 import os
 import threading
+import subprocess
 from google.colab import drive,output
-from .lib import py
 
 class App:
     def __init__(self,*, use_drive=False, args='--share --no-half-vae --xformers --enable-insecure-extension- --theme dark'):
@@ -12,5 +12,5 @@ class App:
                 drive.mount('/content/drive', force_remount=True)
             WORKSPACE = '/content/drive/MyDrive/kim-colab/A1111'
         def run():
-            return py(f'{WORKSPACE}/launch.py')
+            return subprocess.run(['python',f'{WORKSPACE}/launch.py'])
         threading.Thread(target=run)
