@@ -1,7 +1,8 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import sys
 
-IP = ''
-PORT = 1476
+IP = '127.0.0.1'
+PORT = int(sys.argv[1])
 
 class App(BaseHTTPRequestHandler):
     def do_GET(self):
