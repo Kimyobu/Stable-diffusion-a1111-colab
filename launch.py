@@ -5,7 +5,7 @@ import module.a1111 as A1111
 css = '.dr {align-content: center;}'
 
 def op(choices=[],value=[]):
-    return gr.CheckboxGroup([]+choices,value=[]+value)
+    return gr.CheckboxGroup(['Use Google Drive']+choices,value=[True]+value)
 
 def label(title):
     gr.Text(lines=0,max_lines=0,interactive=False,show_label=False,value=title)
