@@ -1,28 +1,39 @@
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from flask import Flask, request, jsonify
 import sys
+import subprocess
+import json
+import os.path as Path
 
-IP = '127.0.0.1'
-PORT = int(sys.argv[1])
+from module import A1111
 
-class App(BaseHTTPRequestHandler):
-    def do_GET(self):
-        if self.path == '/':
-            self.path = '/ui.html'
-        if self.path == '/ui.html' or self.path == '/script.js':
-            content_type = 'text/html' if self.path == '/ui.html' else 'text/javascript'
-            self.send_response(200)
-            self.send_header('Content-type', content_type)
-            self.end_headers()
+app = Flask(__name__)
+args = sys.argv[1:]
+port = int(args[0])
 
-            with open(self.path[1:], 'rb') as file:
-                self.wfile.write(file.read())
-        else:
-            self.send_response(404)
-            self.end_headers()
+@app.get("/")
+def home():
+    page = open(Path.join(Path.dirname(__file__), 'ui.html'))
+    return page.read(), 200
 
+@app.post("/la")
+def la():
+    data_json = request.get_json()
+    data = jsonify(data_json)
+
+    name = data_json['name']
+    la_args = data_json['args']
+    if name == 'ComfyUI':
+        pass
+    elif name == 'A1111':
+        A1111.App(la_args)
+    elif name == 'SDNext':
+        pass
+
+    return data, 201
+
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 if __name__ == '__main__':
-    server_address = (IP, PORT)
-    httpd = HTTPServer(server_address, App)
-    print(f"Server running at {IP}:{PORT}")
-    httpd.serve_forever()
+    app.run(port=port,debug=False)

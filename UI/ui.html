@@ -36,7 +36,12 @@
 </style>
 
 <body>
-    <script src="./script.js"></script>
+    <div class="main">
+        <div class="row" style="text-align: center;background-color: red;">
+            !!! มันยังกากๆอยู่นะครับใครช่วยได้ Pull Request มาเลยครับ !!!
+        </div>
+
+    </div>
     <script>
         function resizeInput(input) {
             const textLength = input.value.length;
@@ -44,13 +49,108 @@
                 input.style.width = textLength * 8 + 'px';
             }
         }
+        /**@type {{name:string,defaultArgs:string}[]}*/
+        let app = [
+            {
+                name: 'ComfyUI',
+                defaultArgs: '',
+            },
+            {
+                name: 'A1111',
+                defaultArgs: '--share --no-half-vae --xformers --enable-insecure-extension- --theme dark',
+            },
+            {
+                name: 'SDNext',
+                defaultArgs: '',
+            }
+        ]
+
+
+        window.onload = function () {
+            console.log('Welcome To GUI')
+
+            let main = document.querySelector('.main')
+            app.forEach(a => {
+                // สร้าง element div
+                let node = document.createElement('div');
+                node.className = 'row';
+
+                // เพิ่มข้อความ 'A1111' เป็น text node ใน div
+                let title = document.createTextNode(a.name);
+                node.appendChild(title);
+
+                // เพิ่ม input checkbox และ label 'Installed'
+                let installed = document.createElement('input');
+                installed.type = 'checkbox';
+                installed.id = 'readonly'
+                let labelInstalled = document.createElement('label');
+                labelInstalled.textContent = 'Installed';
+                labelInstalled.id = a.name
+                node.appendChild(installed);
+                node.appendChild(labelInstalled);
+
+                // เพิ่ม input checkbox และ label 'Use Google Drive'
+                let use_g_drive = document.createElement('input');
+                use_g_drive.type = 'checkbox';
+                let labelGoogleDrive = document.createElement('label');
+                labelGoogleDrive.textContent = 'Use Google Drive';
+                node.appendChild(use_g_drive);
+                node.appendChild(labelGoogleDrive);
+
+                // สร้าง div ใน div และเพิ่มข้อความและ input text ใน div ใหม่
+                let commandLineDiv = document.createElement('div');
+                commandLineDiv.style.display = 'inline-block';
+                let commandLineText = document.createTextNode(' | CommandLineArgs:');
+                let inputCommandLine = document.createElement('input');
+                inputCommandLine.type = 'text';
+                inputCommandLine.className = 'dynamic-input';
+                inputCommandLine.id = a.name
+                inputCommandLine.value = a.defaultArgs
+                inputCommandLine.oninput = function () {
+                    resizeInput(inputCommandLine);
+                };
+                commandLineDiv.appendChild(commandLineText);
+                commandLineDiv.appendChild(inputCommandLine);
+                node.appendChild(commandLineDiv);
+
+                // เพิ่ม button 'Launch'
+                let launchButton = document.createElement('button');
+                launchButton.className = 'la';
+                launchButton.textContent = 'Launch';
+                launchButton.id = a.name
+                node.appendChild(launchButton);
+                main.appendChild(node)
+
+            })
+            document.body.addEventListener('click', function (ev) {
+                let target = ev.target
+                if (target) {
+                    if (target.id === 'readonly') {
+                        ev.preventDefault()
+                    } else if (target.className === 'la') {
+                        let elem = document.querySelectorAll(`#${target.id}`)
+                        let args
+                        
+                        elem.forEach(e => {
+                            if (e.tagName === 'INPUT') args = e.value
+                        })
+                        fetch(`/la`, {
+                            method: "POST",
+                            body: JSON.stringify({
+                                name:target.id,
+                                args:args
+                            }),
+                            headers: {
+                                "Content-type": "application/json; charset=UTF-8"
+                            }
+                        })
+                            .then(res => res.text())
+                            .then(text => console.log(text))
+                    }
+                }
+            })
+        }
     </script>
-    <div class="main">
-        <div class="row" style="text-align: center;background-color: red;">
-            !!! มันยังกากๆอยู่นะครับใครช่วยได้ Pull Request มาเลยครับ !!!
-        </div>
-        
-    </div>
 </body>
 
 </html>
