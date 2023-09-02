@@ -52,7 +52,8 @@ def get_json():
     file = open(get_file('config.json'),'r')
     data = file.read()
     file.close()
-    return jsonify(json.loads(data)), 200
+    data_dict = json.loads(data)
+    return jsonify(data_dict), 200
 
 #Get listen for get temp data
 @app.route('/temp-data', methods=['GET', 'POST'])

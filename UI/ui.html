@@ -7,20 +7,63 @@
     <title>Test</title>
 </head>
 <style>
+
     html {
-        padding-top: 10px;
+        padding: 0;
+        margin: 0;
+    }
+
+    body {
+        padding: 0;
+        margin: 0;
     }
 
     .la {
         width: auto;
         height: auto;
-        position: fixed;
         right: 0;
         margin-right: 15px;
         font-size: large;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
+        display: inline;
+        float: right;
+        background-color: #EA4C89;
+        border-radius: 8px;
+        border-style: none;
+        box-sizing: border-box;
+        color: #FFFFFF;
+        cursor: pointer;
+        font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        list-style: none;
+        margin: 0;
+        outline: none;
+        padding: 10px 16px;
+        position: relative;
+        text-align: center;
+        text-decoration: none;
+        transition: color 100ms;
+        vertical-align: baseline;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+    }
+
+    .la:hover {
+        background-color: #F082AC;
+        box-shadow: #f082acce 0 8px 15px;
+        transform: translateY(-2px);
+    }
+
+    .la:active {
+        box-shadow: none;
+        transform: translateY(0);
+    }
+
+    .la:disabled {
+        pointer-events: none;
+        background-color: #f082ac48;
     }
 
     .row {
@@ -42,6 +85,9 @@
         </div>
     </header>
     <div class="main"></div>
+    <footer>
+
+    </footer>
     <script>
         function resizeInput(input) {
             const textLength = input.value.length;
@@ -104,15 +150,15 @@
                     let title = document.createTextNode(a.name);
                     node.appendChild(title);
 
-                    // เพิ่ม input checkbox และ label 'Installed'
-                    let installed = document.createElement('input');
-                    installed.type = 'checkbox';
-                    installed.id = 'readonly'
-                    let labelInstalled = document.createElement('label');
-                    labelInstalled.textContent = 'Installed';
-                    labelInstalled.id = a.name
-                    node.appendChild(installed);
-                    node.appendChild(labelInstalled);
+                    // // เพิ่ม input checkbox และ label 'Installed'
+                    // let installed = document.createElement('input');
+                    // installed.type = 'checkbox';
+                    // installed.id = 'readonly'
+                    // let labelInstalled = document.createElement('label');
+                    // labelInstalled.textContent = 'Installed';
+                    // labelInstalled.id = a.name
+                    // node.appendChild(installed);
+                    // node.appendChild(labelInstalled);
 
                     // เพิ่ม input checkbox และ label 'Use Google Drive'
                     let use_g_drive = document.createElement('input');
@@ -121,22 +167,6 @@
                     labelGoogleDrive.textContent = 'Use Google Drive';
                     node.appendChild(use_g_drive);
                     node.appendChild(labelGoogleDrive);
-
-                    // สร้าง div ใน div และเพิ่มข้อความและ input text ใน div ใหม่
-                    let commandLineDiv = document.createElement('div');
-                    commandLineDiv.style.display = 'inline-block';
-                    let commandLineText = document.createTextNode(' | CommandLineArgs:');
-                    let inputCommandLine = document.createElement('input');
-                    inputCommandLine.type = 'text';
-                    inputCommandLine.className = 'dynamic-input';
-                    inputCommandLine.id = a.name
-                    inputCommandLine.value = a.defaultArgs
-                    inputCommandLine.oninput = function () {
-                        resizeInput(inputCommandLine);
-                    };
-                    commandLineDiv.appendChild(commandLineText);
-                    commandLineDiv.appendChild(inputCommandLine);
-                    node.appendChild(commandLineDiv);
 
                     // เพิ่ม button 'Launch'
 
@@ -149,6 +179,26 @@
                     launchButton.disabled = a.lock ?? false
                     node.appendChild(launchButton);
                     main.appendChild(node)
+
+                    // สร้าง div ใน div และเพิ่มข้อความและ input text ใน div ใหม่
+                    let commandLineDiv = document.createElement('div');
+                    let commandLineText = document.createTextNode('CommandLineArgs:');
+                    let inputCommandLine = document.createElement('input');
+                    inputCommandLine.type = 'text';
+                    inputCommandLine.className = 'dynamic-input';
+                    inputCommandLine.id = a.name
+                    inputCommandLine.value = a.defaultArgs
+                    inputCommandLine.oninput = function () {
+                        resizeInput(inputCommandLine);
+                    };
+                    commandLineDiv.appendChild(commandLineText);
+                    commandLineDiv.appendChild(inputCommandLine);
+                    node.appendChild(commandLineDiv);
+                    let reset = document.createElement("button")
+                    reset.style.display = 'inline'
+                    reset.textContent = '🔃'
+                    commandLineDiv.append(reset)
+
 
                 })
             }

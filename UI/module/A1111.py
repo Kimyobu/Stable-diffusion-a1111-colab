@@ -7,6 +7,9 @@ PATH = '/content/A1111'
 req = Path.join(PATH,'requirements.txt')
 file = Path.join(PATH,'launch.py')
 
+def is_installed():
+    return Path.isdir(PATH)
+
 def la(args):
     return subprocess.run(f'COMMANDLINE_ARGS="{args}" {sys.executable} {file}', shell=True, cwd=PATH)
 
