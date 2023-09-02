@@ -23,7 +23,7 @@ temp.write('{}')
 temp.close()
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode='gevent')
 args = sys.argv[1:]
 port = int(args[0])
 
