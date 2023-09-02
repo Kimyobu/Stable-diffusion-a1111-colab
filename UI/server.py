@@ -60,9 +60,8 @@ def la():
         p = A1111.App(la_args)
         def a1111():
             for line in p.stdout:
-                l = line.decode()
-                if 'Running on public URL:' in l:
-                    redirect(l.split(': ')[1])
+                if 'Running on public URL:' in line:
+                    redirect(line.split(': ')[1])
                 print(line, end='')
         threading.Thread(target=a1111,daemon=True).start()
     elif name == 'SDNext':
