@@ -3,6 +3,7 @@ import os.path as Path
 import os
 import threading
 import json
+import re
 from flask import Flask, request, jsonify, redirect
 
 from module import A1111
@@ -61,7 +62,8 @@ def la():
         def a1111():
             for line in p.stdout:
                 if 'Running on public URL:' in line:
-                    redirect(line.split(': ')[1])
+                    url = re.findall(r'(https?://\S+)', line.split(': ')[1])[0]
+                    redirect(url)
                 print(line, end='')
         threading.Thread(target=a1111,daemon=True).start()
     elif name == 'SDNext':
