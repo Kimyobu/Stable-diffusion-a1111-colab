@@ -1,5 +1,6 @@
 import sys
 import os.path as Path
+import os
 import json
 from flask import Flask, request, jsonify
 
@@ -7,6 +8,9 @@ from module import A1111
 
 def get_file(*path:str):
     return Path.join(Path.dirname(__file__), *path)
+
+if not Path.isdir(get_file('.temp')):
+    os.mkdir(get_file('.temp'))
 
 def get_temp(mode='w'):
     return open(get_file('.temp', 'temp.json'), mode)
