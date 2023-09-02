@@ -211,8 +211,13 @@
                     if (target.id === 'readonly') {
                         ev.preventDefault()
                     } else if (target.className === 'la') {
-                        target.disabled = true
+                        
+                        document.querySelectorAll('.la').forEach(e => {
+                            e.disabled = True
+                        })
+
                         let elem = document.querySelectorAll(`#${target.id}`)
+                        
                         let args
                         elem.forEach(e => {
                             if (e.tagName === 'INPUT') args = e.value
