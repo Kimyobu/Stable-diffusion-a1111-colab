@@ -61,11 +61,11 @@ def la():
         p = A1111.App(la_args)
         def a1111():
             for line in p.stdout:
-                print(line, end='')
-                if 'Running on public URL:' in line:
-                    url = re.findall(r'(https?://\S+)', line.split(': ')[1])[0]
-                    redirect(url)
-        threading.Thread(target=a1111,daemon=True).start()
+                l = line.strip()  # ลบช่องว่างที่ไม่จำเป็น
+                print(l)  # แสดงผลแต่ละบรรทัด
+
+        thread = threading.Thread(target=a1111, daemon=True)
+        thread.start()
     elif name == 'SDNext':
         pass
 
