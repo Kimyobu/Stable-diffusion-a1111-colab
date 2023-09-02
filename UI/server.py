@@ -44,7 +44,7 @@ def la():
     lock = data_json['lock']
     rename = data_json['rename']
 
-    f['la'] = data.get('la') or {}
+    f['la'] = data_json.get('la') or {}
     f['la'][name] = {
             'name': rename,
             'lock': lock
