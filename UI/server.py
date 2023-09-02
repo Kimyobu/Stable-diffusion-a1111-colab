@@ -68,7 +68,7 @@ def la():
     elif name == 'SDNext':
         pass
 
-    return out, 201
+    return data, 201
 
 #Get listen for get config
 @app.get('/get-config')
