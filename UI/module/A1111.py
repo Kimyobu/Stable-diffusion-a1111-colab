@@ -1,4 +1,3 @@
-import threading
 import subprocess
 import sys
 import os.path as Path
@@ -10,8 +9,6 @@ file = Path.join(PATH,'launch.py')
 def is_installed():
     return Path.isdir(PATH)
 
-def la(args):
-    return subprocess.run(f'COMMANDLINE_ARGS="{args}" {sys.executable} {file}', shell=True, cwd=PATH)
+def App(args):
+    return subprocess.Popen(f'COMMANDLINE_ARGS="{args}" {sys.executable} {file}', shell=True, cwd=PATH,stdout=subprocess.PIPE,stderr=subprocess.PIPE, universal_newlines=True)
 
-def App(args:str):
-    threading.Thread(target=la,daemon=True,args=[args,]).start()

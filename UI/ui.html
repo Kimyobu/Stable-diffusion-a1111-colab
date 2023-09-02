@@ -7,15 +7,12 @@
     <title>Test</title>
 </head>
 <style>
-
-    html {
-        padding: 0;
-        margin: 0;
-    }
-
+    html,
     body {
-        padding: 0;
+        height: 100%;
+        width: 100%;
         margin: 0;
+        padding: 0;
     }
 
     .la {
@@ -211,13 +208,13 @@
                     if (target.id === 'readonly') {
                         ev.preventDefault()
                     } else if (target.className === 'la') {
-                        
+
                         document.querySelectorAll('.la').forEach(e => {
                             e.disabled = true
                         })
 
                         let elem = document.querySelectorAll(`#${target.id}`)
-                        
+
                         let args
                         elem.forEach(e => {
                             if (e.tagName === 'INPUT') args = e.value
@@ -226,21 +223,9 @@
                             method: "POST",
                             body: JSON.stringify({
                                 name: target.id,
-                                args: args
-                            }),
-                            headers: {
-                                "Content-type": "application/json; charset=UTF-8"
-                            }
-                        })
-                            .then(res => res.text())
-                            .then(text => console.log(text))
-                        fetch(`/temp-data`, {
-                            method: "POST",
-                            body: JSON.stringify({
-                                name: target.id,
                                 args: args,
-                                rename: 'Launched',
-                                lock: true
+                                'lock': true,
+                                'rename': 'Launched'
                             }),
                             headers: {
                                 "Content-type": "application/json; charset=UTF-8"

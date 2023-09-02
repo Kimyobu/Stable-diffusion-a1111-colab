@@ -1,8 +1,9 @@
 import sys
 import os.path as Path
 import os
+import threading
 import json
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect
 
 from module import A1111
 
@@ -35,16 +36,39 @@ def la():
     data_json = request.get_json()
     data = jsonify(data_json)
 
+    out = None
+    temp = get_temp('r')
+    f = json.loads(temp.read())
+
+    name = data_json['name']
+    lock = data_json['lock']
+    rename = data_json['rename']
+
+    f['la'] = data.get('la') or {}
+    f['la'][name] = {
+            'name': rename,
+            'lock': lock
+        }
+    temp = get_temp()
+    temp.write(json.dumps(f, indent=2))
+    temp.close()
     name = data_json['name']
     la_args = data_json['args']
     if name == 'ComfyUI':
         pass
     elif name == 'A1111':
-        A1111.App(la_args)
+        p = A1111.App(la_args)
+        def a1111():
+            for line in p.stdout:
+                l = line.decode()
+                if 'Running on public URL:' in l:
+                    redirect(l.split(': ')[1])
+                print(line, end='')
+        threading.Thread(target=a1111,daemon=True).start()
     elif name == 'SDNext':
         pass
 
-    return data, 201
+    return out, 201
 
 #Get listen for get config
 @app.get('/get-config')
@@ -64,23 +88,7 @@ def temp_data():
         file.close()
         return jsonify(json.loads(data)), 200
     elif request.method == 'POST':
-        req = request.get_json()
-        temp = get_temp('r')
-        data = json.loads(temp.read())
-
-        name = req['name']
-        lock = req['lock']
-        rename = req['rename']
-
-        data['la'] = data.get('la') or {}
-        data['la'][name] = {
-                'name': rename,
-                'lock': lock
-            }
-        temp = get_temp()
-        temp.write(json.dumps(data, indent=2))
-        temp.close()
-        return 'Saved', 201
+        return 'None', 201
 
 import logging
 log = logging.getLogger('werkzeug')

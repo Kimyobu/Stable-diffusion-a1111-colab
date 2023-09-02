@@ -25,6 +25,6 @@ port = int(sys.argv[1])
 threading.Thread(target=iframe_thread, daemon=True,args=(port,)).start()
 
 try:
-    subprocess.run([sys.executable, Path.join(Path.dirname(__file__), 'server.py'), str(port)])
+    subprocess.run([sys.executable, Path.join(Path.dirname(__file__), 'server.py'), str(port)], stdout=subprocess.PIPE, universal_newlines=True)
 except KeyboardInterrupt:
   print('Closing Server...')
