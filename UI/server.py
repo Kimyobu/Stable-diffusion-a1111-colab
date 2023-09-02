@@ -5,6 +5,7 @@ import threading
 import json
 import re
 from flask import Flask, request, jsonify, redirect
+from flask_socketio import SocketIO, emit
 
 from module import A1111
 
@@ -22,6 +23,7 @@ temp.write('{}')
 temp.close()
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 args = sys.argv[1:]
 port = int(args[0])
 
@@ -30,6 +32,10 @@ port = int(args[0])
 def home():
     page = open(get_file('ui.html'))
     return page.read(), 200
+
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')  # แสดงข้อความเมื่อมีการเชื่อมต่อ
 
 #Listen for launch button click
 @app.post('/la')
@@ -61,8 +67,7 @@ def la():
         p = A1111.App(la_args)
         def a1111():
             for line in p.stdout:
-                l = line.strip()  # ลบช่องว่างที่ไม่จำเป็น
-                print(l)  # แสดงผลแต่ละบรรทัด
+                emit('output', line)
 
         thread = threading.Thread(target=a1111, daemon=True)
         thread.start()
@@ -96,4 +101,4 @@ log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 if __name__ == '__main__':
-    app.run(port=port,debug=False)
+    socketio.run(app,port=port,debug=False)

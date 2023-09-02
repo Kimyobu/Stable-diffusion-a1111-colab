@@ -73,6 +73,10 @@
         width: 600px;
         font-size: 14px;
     }
+
+    .console {
+        background-color: black;
+    }
 </style>
 
 <body>
@@ -82,6 +86,12 @@
         </div>
     </header>
     <div class="main"></div>
+    <div class="console">
+        <pre id="console-output"></pre>
+    </div>
+
+    <!-- เพิ่มเครื่องมือสำหรับการเชื่อมต่อกับ WebSocket -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <footer>
 
     </footer>
@@ -244,6 +254,14 @@
                     }
                 }
             })
+            // เชื่อมต่อกับ WebSocket ของเซิร์ฟเวอร์ Flask
+            const socket = io.connect(window.location.host);
+
+            // รับข้อมูล output จาก WebSocket และแสดงผลใน console
+            socket.on('output', function (data) {
+                const consoleOutput = document.getElementById('console-output');
+                consoleOutput.textContent += data + '\n';
+            });
         }
     </script>
 </body>
