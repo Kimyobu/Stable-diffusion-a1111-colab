@@ -77,8 +77,8 @@ def la():
                 # text = stdout.decode()
                 
                 log = get_temp(mode='a',file='log.txt')
-                log.write(stdout)
-                socketio.emit('output',{'body':stdout})
+                log.write(stderr)
+                socketio.emit('output',{'body':stderr})
                 p.wait()
                 log.close()
             thread = threading.Thread(target=run, daemon=True)
