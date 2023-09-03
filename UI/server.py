@@ -4,8 +4,9 @@ import os
 import threading
 import json
 import re
+import logging
 from flask import Flask, request, jsonify, redirect
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
 
 from module import A1111
 
@@ -15,17 +16,29 @@ def get_file(*path:str):
 if not Path.isdir(get_file('.temp')):
     os.mkdir(get_file('.temp'))
 
-def get_temp(mode='w'):
-    return open(get_file('.temp', 'temp.json'), mode)
+def get_temp(mode='w',file='temp.json'):
+    return open(get_file('.temp', file), mode)
+
+def parse_url(text:str):
+    url_pattern = r'https?://\S+'
+    return re.findall(url_pattern, text)
 
 temp = get_temp()
 temp.write('{}')
 temp.close()
+log = get_temp(file='log.txt')
+log.write('')
+log.close()
+
+
 
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode='gevent')
 args = sys.argv[1:]
 port = int(args[0])
+
+def info(msg:str):
+    return socketio.server.logger.info(msg)
 
 #Home Page
 @app.get('/')
@@ -43,36 +56,52 @@ def la():
     data_json = request.get_json()
     data = jsonify(data_json)
 
-    out = None
-    temp = get_temp('r')
-    f = json.loads(temp.read())
-
     name = data_json['name']
     lock = data_json['lock']
     rename = data_json['rename']
 
-    f['la'] = data_json.get('la') or {}
-    f['la'][name] = {
-            'name': rename,
-            'lock': lock
-        }
-    temp = get_temp()
-    temp.write(json.dumps(f, indent=2))
-    temp.close()
-    name = data_json['name']
+    out = None
     la_args = data_json['args']
-    if name == 'ComfyUI':
-        pass
-    elif name == 'A1111':
-        p = A1111.App(la_args)
-        def a1111():
-            for line in p.stdout:
-                emit('output', line)
+    info(f'Name: {name}')
+    try:
+        p = None
+        if name == 'ComfyUI':
+            pass
+        elif name == 'A1111':
+            p = A1111.App(la_args)
+        elif name == 'SDNext':
+            pass
+        if p is not None:
+            def run():
+                stdout,stderr = p.communicate()
+                # text = stdout.decode()
+                
+                log = get_temp(mode='a',file='log.txt')
+                log.write(stdout)
+                socketio.emit('output',{'body':stdout})
+                p.wait()
+                log.close()
+            thread = threading.Thread(target=run, daemon=True)
+            thread.start()
+            temp = get_temp('r')
+            f = json.loads(temp.read())
 
-        thread = threading.Thread(target=a1111, daemon=True)
-        thread.start()
-    elif name == 'SDNext':
-        pass
+            f['la'] = data_json.get('la') or {}
+            f['la'][name] = {
+                    'name': rename,
+                    'lock': lock
+                }
+            temp = get_temp()
+            temp.write(json.dumps(f, indent=2))
+            temp.close()
+            name = data_json['name']
+    except Exception as e:
+        data = f"Error:{type(e).__name__}\n{str(e)}\n{e.args}"
+        print(data,end='')
+        log = get_temp(mode='a',file='log.txt')
+        log.write(data)
+        log.close()
+        socketio.emit('output',{'body':data})
 
     return data, 201
 
@@ -89,16 +118,25 @@ def get_json():
 @app.route('/temp-data', methods=['GET', 'POST'])
 def temp_data():
     if request.method == 'GET':
-        file = open(get_file('.temp', 'temp.json'),'r')
-        data = file.read()
+        file = get_temp('r')
+        data = json.loads(file.read())
         file.close()
-        return jsonify(json.loads(data)), 200
+        log = get_temp('r', 'log.txt')
+        log_data = log.read()
+        log.close()
+
+        data['log'] = log_data
+
+        return jsonify(data), 200
     elif request.method == 'POST':
+        data = request.get_json()
+        if data.get('name') == 'reset-log':
+            log = get_temp('w', 'log.txt')
+            log.write('')
+            log.close()
+            return 'Reset-log!!', 201
         return 'None', 201
 
-import logging
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
-
 if __name__ == '__main__':
+    app.logger.addHandler(logging.StreamHandler(sys.stdout))
     socketio.run(app,port=port,debug=False)

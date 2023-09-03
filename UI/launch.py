@@ -11,13 +11,14 @@ def iframe_thread(port):
       sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       result = sock.connect_ex(('127.0.0.1', port))
       if result == 0:
+        print(f'Starting Local Server as http://127.0.0.1:{port}')
         break
       sock.close()
-  p = subprocess.Popen(["cloudflared", "tunnel", "--loglevel", "info", "--url", "http://127.0.0.1:{}".format(port)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  p = subprocess.Popen(["cloudflared", "tunnel", "--loglevel", "info", "--url", f"http://127.0.0.1:{port}"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   for line in p.stderr:
     l = line.decode()
     if "trycloudflare.com " in l:
-      print("This is the URL to access ManagerUI:", l[l.find("http"):], end='')
+      print("Starting Public Server as", l[l.find("http"):], end='')
     #print(l, end='')
 
 port = int(sys.argv[1])

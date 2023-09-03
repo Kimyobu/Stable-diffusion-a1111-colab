@@ -74,8 +74,32 @@
         font-size: 14px;
     }
 
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
     .console {
         background-color: black;
+        color: white;
+        overflow: auto;
+        width: 100%;
+        height: 150px;
+    }
+
+    .label {
+        background-color: #F082AC;
+        margin-bottom: 0;
+        height: 20px;
+        vertical-align: middle;
+    }
+
+    #log-reset {
+        float: right;
+        right: 0;
+        height: 20px;
     }
 </style>
 
@@ -85,16 +109,13 @@
             !!! มันยังกากๆอยู่นะครับใครช่วยได้ Pull Request มาเลยครับ !!!
         </div>
     </header>
-    <div class="main"></div>
-    <div class="console">
-        <pre id="console-output"></pre>
+    <div id="app">
+        <div class="main"></div>
+        <div class="footer"></footer>
     </div>
 
     <!-- เพิ่มเครื่องมือสำหรับการเชื่อมต่อกับ WebSocket -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
-    <footer>
-
-    </footer>
     <script>
         function resizeInput(input) {
             const textLength = input.value.length;
@@ -102,33 +123,35 @@
                 input.style.width = textLength * 8 + 'px';
             }
         }
-        /**@type {{name:string,defaultArgs:string}[]}*/
 
+        async function request(url, body = {}, method = 'GET') {
+            body = (method == 'POST') ? JSON.stringify(body) : null
+            console.info(`[App] Requesting from/to ${url} Method: ${method} with Body: ${body}`)
+            return fetch(url, {
+                method: method,
+                body: body,
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+        }
 
         window.onload = async function () {
             console.log('Welcome To GUI')
 
             var config
             var app
+            var DATA = {}
             var data_la
 
             async function fetch_data() {
-                config = await (fetch('/get-config', {
-                    method: 'GET',
-                    headers: {
-                        "Content-type": "application/json; charset=UTF-8"
-                    }
-                }).then(res => res.json()))
+                console.info('[App] Fetching Data...')
+                config = await (request('/get-config').then(res => res.json()))
                 app = config.app
 
-                data = await (fetch('/temp-data', {
-                    method: 'GET',
-                    headers: {
-                        "Content-type": "application/json; charset=UTF-8"
-                    }
-                }).then(res => res.json()))
+                DATA = await (request('/temp-data').then(res => res.json()))
 
-                data_la = data.la
+                data_la = DATA.la
 
                 for (let x in data_la) {
                     ad = data_la[x]
@@ -143,11 +166,14 @@
                 }
             }
 
-            await fetch_data()
-
             var main = document.querySelector('.main')
+            var footer = document.querySelector('.footer')
+            var UI = document.querySelector('#app')
 
-            async function create_ui(main) {
+            async function create_ui() {
+                console.info('[App] Creating UI')
+                let child = UI.lastElementChild
+                
                 app.forEach(a => {
                     // สร้าง element div
                     let node = document.createElement('div');
@@ -180,7 +206,7 @@
                     let this_data = data_la?.[a.name]
 
                     let launchButton = document.createElement('button');
-                    launchButton.className = 'la';
+                    launchButton.className = 'la'
                     launchButton.textContent = a.rename ?? 'Launch'
                     launchButton.id = a.name
                     launchButton.disabled = a.lock ?? false
@@ -205,12 +231,56 @@
                     reset.style.display = 'inline'
                     reset.textContent = '🔃'
                     commandLineDiv.append(reset)
+                })
+                //Footer
+                // Get the parent element <footer>
+                // Create <p> element with class "label"
+                const labelParagraph = document.createElement('p');
+                labelParagraph.className = 'label';
+                labelParagraph.textContent = 'Console:';
 
+                const console_reset = document.createElement("button")
+                console_reset.className = 'button'
+                console_reset.id = 'log-reset'
+                console_reset.textContent = 'Reset'
 
+                // Create <div> element with class "console"
+                const consoleDiv = document.createElement('div');
+                consoleDiv.className = 'console';
+
+                // Create <pre> element with id "console-output"
+                const preElement = document.createElement('pre');
+                preElement.id = 'console-output';
+                preElement.textContent = DATA.log ?? ''
+
+                // Append the <pre> element to the <div> element
+                consoleDiv.appendChild(preElement);
+
+                // Append the <p> element and <div> element to the <footer> element
+                labelParagraph.appendChild(console_reset)
+                fc = [labelParagraph, consoleDiv]
+                fc.forEach(e => footer.appendChild(e))
+
+                footer.style.resize = 'vertical'
+            }
+            async function destroy_ui() {
+                let elems = UI.children;
+                [...Array(elems.length)].forEach((_,i) => {
+                    let e = elems[i]
+                    let child = e.lastElementChild;
+                    while (child) {
+                        e.removeChild(child)
+                        child = e.lastElementChild
+                    }
                 })
             }
+            async function load_ui() {
+                await fetch_data()
+                await destroy_ui()
+                await create_ui()
+            }
 
-            create_ui(main)
+            await load_ui()
 
             document.body.addEventListener('click', async function (ev) {
                 let target = ev.target
@@ -229,28 +299,23 @@
                         elem.forEach(e => {
                             if (e.tagName === 'INPUT') args = e.value
                         })
-                        fetch(`/la`, {
-                            method: "POST",
-                            body: JSON.stringify({
-                                name: target.id,
-                                args: args,
-                                'lock': true,
-                                'rename': 'Launched'
-                            }),
-                            headers: {
-                                "Content-type": "application/json; charset=UTF-8"
-                            }
-                        })
+                        await request('/la', {
+                            'name': target.id,
+                            'args': args,
+                            'lock': true,
+                            'rename': 'Launched'
+                        }, 'POST')
                             .then(res => res.text())
                             .then(text => console.log(text))
                         await fetch_data()
-                        let main = document.querySelector('.main')
-                        let child = main.lastElementChild
-                        while (child) {
-                            main.removeChild(child);
-                            child = main.lastElementChild;
-                        }
-                        create_ui(main)
+                        await load_ui()
+                    } else if (target.id === 'log-reset') {
+                        let text = await (request('/temp-data', {
+                            'name': 'reset-log'
+                        }, 'POST')
+                            .then(res => res.text()))
+                        console.log(text)
+                        await load_ui()
                     }
                 }
             })
@@ -260,7 +325,7 @@
             // รับข้อมูล output จาก WebSocket และแสดงผลใน console
             socket.on('output', function (data) {
                 const consoleOutput = document.getElementById('console-output');
-                consoleOutput.textContent += data + '\n';
+                consoleOutput.textContent += data.body + '\n';
             });
         }
     </script>
