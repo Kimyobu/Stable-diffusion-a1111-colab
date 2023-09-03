@@ -1,7 +1,7 @@
 import gradio as gr
 import sys
 import os.path as Path
-from utils import py
+from UI.module.utils import py
 
 args = sys.argv[1:]
 PORT = int(args[0])

@@ -1,7 +1,7 @@
 import subprocess
 import sys
 import os
-from utils import is_installed, run_pip, py
+from UI.module.utils import is_installed, run_pip, py
 
 args = sys.argv[1:]
 PORT = int(args[0])

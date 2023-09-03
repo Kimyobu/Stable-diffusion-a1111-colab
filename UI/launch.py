@@ -4,6 +4,18 @@ import threading
 import time
 import socket
 import os.path as Path
+from module.utils import run_pip
+
+subprocess.run('dpkg -i /content/kim-colab-project/UI/cloudflared-linux-amd64.deb', shell=True, stdout=subprocess.DEVNULL)
+
+PATH = Path.realpath(__file__)
+DIR = Path.dirname(PATH)
+
+requirements = open(Path.join(DIR, 'requirements.txt'))
+reqs = requirements.read()
+requirements.close()
+for r in reqs.split('\n'):
+   run_pip(r)
 
 def iframe_thread(port):
   while True:
