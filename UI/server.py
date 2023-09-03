@@ -37,8 +37,6 @@ socketio = SocketIO(app, async_mode='gevent')
 args = sys.argv[1:]
 port = int(args[0])
 
-def info(msg:str):
-    return socketio.server.logger.info(msg)
 
 #Home Page
 @app.get('/')
@@ -62,7 +60,6 @@ def la():
 
     out = None
     la_args = data_json['args']
-    info(f'Name: {name}')
     try:
         p = None
         if name == 'ComfyUI':
@@ -73,13 +70,12 @@ def la():
             pass
         if p is not None:
             def run():
-                stdout,stderr = p.communicate()
-                # text = stdout.decode()
-                
                 log = get_temp(mode='a',file='log.txt')
-                log.write(stderr)
-                socketio.emit('output',{'body':stderr})
-                p.wait()
+                for line in p.stdout:
+                    l = line.strip()
+                    print(l)
+                    log.write(l)
+                    socketio.emit('output',{'body':l})
                 log.close()
             thread = threading.Thread(target=run, daemon=True)
             thread.start()

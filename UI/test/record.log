@@ -1,0 +1,37 @@
+2023-09-03 09:56:41,570 WARNING werkzeug MainThread :  * Debugger is active!
+2023-09-03 09:56:41,570 INFO werkzeug MainThread :  * Debugger PIN: 119-230-749
+2023-09-03 09:56:45,175 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://localhost:5000
+2023-09-03 09:56:45,175 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2023-09-03 09:56:45,176 INFO werkzeug MainThread :  * Restarting with stat
+2023-09-03 09:56:45,322 WARNING werkzeug MainThread :  * Debugger is active!
+2023-09-03 09:56:45,323 INFO werkzeug MainThread :  * Debugger PIN: 119-230-749
+2023-09-03 09:56:55,368 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [03/Sep/2023 09:56:55] "[33mGET / HTTP/1.1[0m" 404 -
+2023-09-03 09:57:10,889 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [03/Sep/2023 09:57:10] "[33mGET / HTTP/1.1[0m" 404 -
+2023-09-03 09:57:15,751 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [03/Sep/2023 09:57:15] "[33mGET / HTTP/1.1[0m" 404 -
+2023-09-03 09:57:28,266 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://localhost:5000
+2023-09-03 09:57:28,266 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2023-09-03 09:57:28,266 INFO werkzeug MainThread :  * Restarting with stat
+2023-09-03 09:57:28,418 WARNING werkzeug MainThread :  * Debugger is active!
+2023-09-03 09:57:28,418 INFO werkzeug MainThread :  * Debugger PIN: 119-230-749
+2023-09-03 09:58:20,761 INFO werkzeug MainThread :  * Detected change in '/workspaces/Stable-diffusion-a1111-colab/UI/test/test.py', reloading
+2023-09-03 09:58:20,795 INFO werkzeug MainThread :  * Restarting with stat
+2023-09-03 09:59:14,353 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://localhost:4555
+2023-09-03 09:59:14,353 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2023-09-03 09:59:14,354 INFO werkzeug MainThread :  * Restarting with stat
+2023-09-03 09:59:14,509 WARNING werkzeug MainThread :  * Debugger is active!
+2023-09-03 09:59:14,509 INFO werkzeug MainThread :  * Debugger PIN: 119-230-749
+2023-09-03 10:03:48,949 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://localhost:4555
+2023-09-03 10:03:48,949 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2023-09-03 10:03:48,950 INFO werkzeug MainThread :  * Restarting with stat
+2023-09-03 10:03:49,111 WARNING werkzeug MainThread :  * Debugger is active!
+2023-09-03 10:03:49,111 INFO werkzeug MainThread :  * Debugger PIN: 119-230-749
+2023-09-03 10:04:21,803 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://localhost:4555
+2023-09-03 10:04:21,803 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2023-09-03 10:04:21,803 INFO werkzeug MainThread :  * Restarting with stat
+2023-09-03 10:04:21,960 WARNING werkzeug MainThread :  * Debugger is active!
+2023-09-03 10:04:21,960 INFO werkzeug MainThread :  * Debugger PIN: 119-230-749

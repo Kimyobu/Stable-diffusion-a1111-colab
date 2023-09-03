@@ -11,4 +11,4 @@ def is_installed():
 
 
 def App(args):
-    return subprocess.Popen(f'COMMANDLINE_ARGS="{args}" {sys.executable} {file}', shell=True, cwd=PATH,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    return subprocess.Popen(f'COMMANDLINE_ARGS="{args}" {sys.executable} {file}', shell=True, cwd=PATH,stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1, universal_newlines=True)
