@@ -12,7 +12,7 @@ def is_installed(name:str,pkg_version:str or None=None):
     package = importlib.util.find_spec(name)
     if package is not None:
         out = True
-        if pkg_version:
+        if pkg_version is not None:
             if version(package.name) != pkg_version:
                 out = False
     
