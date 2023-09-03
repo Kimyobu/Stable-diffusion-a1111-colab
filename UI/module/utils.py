@@ -29,7 +29,7 @@ def py(command, *, cwd=Dir, quiet=False):
 def run_pip(install_syntex:str):
     parse = install_syntex.split('==')
     name = parse[0]
-    ver = parse[1]
+    ver = parse[1] if len(parse) > 1 else None
     if not is_installed(name,ver):
         print(f'Install {install_syntex}')
         py(f'-m pip install {install_syntex}', quiet=True)
