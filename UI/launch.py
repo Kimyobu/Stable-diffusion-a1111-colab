@@ -1,24 +1,28 @@
 import subprocess
 import sys
-import threading
 import time
 import socket
+import threading
+import logging
 import os.path as Path
-from module.utils import run_pip
+from module.utils import run, get_path
 
-subprocess.run('dpkg -i /content/kim-colab-project/UI/cloudflared-linux-amd64.deb', shell=True, stdout=subprocess.DEVNULL)
+logging.basicConfig(filename=get_path('logs/launch.log'), level=logging.DEBUG)
 
-PATH = Path.realpath(__file__)
-DIR = Path.dirname(PATH)
+port = int(sys.argv[1])
+file = Path.realpath(__file__)
+DIR = Path.dirname(file)
 
-requirements = open(Path.join(DIR, 'requirements.txt'))
-reqs = requirements.read()
-requirements.close()
-for r in reqs.split('\n'):
-   run_pip(r)
+print('Install Cloudflared for LinuxAMD64')
+run('dpkg cloudflared-linux-amd64.deb', cwd=DIR, quiet=True)
+print('Starting Server...')
 
 def iframe_thread(port):
-  while True:
+  return subprocess.run(f'python server.py {port}' ,shell=True, cwd=DIR)
+
+threading.Thread(target=iframe_thread, daemon=True,args=(port,)).start()
+
+while True:
       time.sleep(0.5)
       sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       result = sock.connect_ex(('127.0.0.1', port))
@@ -26,18 +30,8 @@ def iframe_thread(port):
         print(f'Starting Local Server as http://127.0.0.1:{port}')
         break
       sock.close()
-  p = subprocess.Popen(["cloudflared", "tunnel", "--loglevel", "info", "--url", f"http://127.0.0.1:{port}"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  for line in p.stderr:
-    l = line.decode()
-    if "trycloudflare.com " in l:
-      print("Starting Public Server as", l[l.find("http"):], end='')
-    #print(l, end='')
-
-port = int(sys.argv[1])
-
-threading.Thread(target=iframe_thread, daemon=True,args=(port,)).start()
-
-try:
-    subprocess.run([sys.executable, Path.join(Path.dirname(__file__), 'server.py'), str(port)], stdout=subprocess.PIPE, universal_newlines=True)
-except KeyboardInterrupt:
-  print('Closing Server...')
+p = subprocess.Popen(["cloudflared", "tunnel", "--loglevel", "info", "--url", f"http://127.0.0.1:{port}"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+for line in p.stderr:
+  l = line.decode()
+  if "trycloudflare.com " in l:
+    print("Starting Public Server as", l[l.find("http"):], end='')

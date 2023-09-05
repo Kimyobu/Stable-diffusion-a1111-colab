@@ -6,6 +6,7 @@ import os.path as Path
 from importlib.metadata import version
 
 Dir = Path.dirname(Path.realpath(__file__))
+WORKSPACE = Path.dirname(Dir)
 
 def is_installed(name:str,pkg_version:str or None=None):
     out = False
@@ -33,3 +34,6 @@ def run_pip(install_syntex:str):
     if not is_installed(name,ver):
         print(f'Install {install_syntex}')
         py(f'-m pip install {install_syntex}', quiet=True)
+
+def get_path(path):
+    return Path.join(WORKSPACE, path)
