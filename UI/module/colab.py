@@ -24,6 +24,6 @@ class A1111:
             if cf is False:
                 print('Can`t Find launch.py [A1111]')
             elif cf is True:
-                return py('launch.py', cwd=self.cwd)
+                return run(f'COMMANDLINE_ARGS="{self.args}" REQS_FILE="requirements.txt" python launch.py', cwd=self.cwd)
 
 
