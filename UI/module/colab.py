@@ -13,8 +13,8 @@ def check(path:str,isfile=False):
 
 class A1111:
     def __init__(self,*, cwd=None, file=None, args=None):
-        self.cwd = cwd or get_path('A1111')
-        self.file = file or get_path('A1111/launch.py')
+        self.cwd = cwd or get_path('ComfyUI')
+        self.file = file or get_path('ComfyUI/launch.py')
         self.args = args or ''
     def launch(self):
         if check(self.cwd) is False:
@@ -24,6 +24,34 @@ class A1111:
             if cf is False:
                 print('Can`t Find launch.py [A1111]')
             elif cf is True:
-                return run(f'COMMANDLINE_ARGS="{self.args}" REQS_FILE="requirements.txt" python launch.py', cwd=self.cwd)
+                return run(f'COMMANDLINE_ARGS="{self.args}" REQS_FILE="requirements.txt" python {self.file}', cwd=self.cwd)
 
+class ComfyUi:
+    def __init__(self,*, cwd=None, file=None, args=None):
+        self.cwd = cwd or get_path('ComfyUI')
+        self.file = file or get_path('ComfyUI/main.py')
+        self.args = args or ''
+    def launch(self):
+        if check(self.cwd) is False:
+            run('git clone https://github.com/comfyanonymous/ComfyUI.git', cwd=WORKSPACE)
+        elif check(self.cwd) is True:
+            cf = check(self.file,isfile=True)
+            if cf is False:
+                print('Can`t Find main.py [ComfyUI]')
+            elif cf is True:
+                return run(f'python {self.file} {self.args}', cwd=self.cwd)
 
+class SDNext:
+    def __init__(self,*, cwd=None, file=None, args=None):
+        self.cwd = cwd or get_path('SDNext')
+        self.file = file or get_path('SDNext/launch.py')
+        self.args = args or ''
+    def launch(self):
+        if check(self.cwd) is False:
+            run('git clone https://github.com/vladmandic/automatic.git', cwd=WORKSPACE)
+        elif check(self.cwd) is True:
+            cf = check(self.file,isfile=True)
+            if cf is False:
+                print('Can`t Find launch.py [SDNext]')
+            elif cf is True:
+                return run(f'COMMANDLINE_ARGS="{self.args}" python {self.file}', cwd=self.cwd)
