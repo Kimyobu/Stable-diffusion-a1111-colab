@@ -20,5 +20,5 @@ if App is not None:
     if App == 'ComfyUi':
         pass
     elif App == 'A1111':
-        A1111(cwd=Cwd, file=File, args=Args)
+        A1111(cwd=Cwd, file=File, args=Args).launch()
 
