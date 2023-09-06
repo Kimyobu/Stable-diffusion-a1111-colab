@@ -13,8 +13,7 @@ port = int(sys.argv[1])
 file = Path.realpath(__file__)
 DIR = Path.dirname(file)
 
-print('Install Cloudflared for LinuxAMD64')
-run('dpkg cloudflared-linux-amd64.deb', cwd=DIR, quiet=True)
+run('dpkg cloudflared-linux-amd64.deb', cwd=DIR, quiet=True, msg='Install Cloudflared for LinuxAMD64')
 print('Starting Server...')
 
 def iframe_thread(port):

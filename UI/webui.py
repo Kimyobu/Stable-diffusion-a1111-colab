@@ -1,5 +1,5 @@
 import argparse
-from module.colab import A1111
+from module.colab import ComfyUi, A1111, SDNext
 
 parser = argparse.ArgumentParser(description="")
 
@@ -18,7 +18,9 @@ Args = args.args
 if App is not None:
     print(f'Finding {App}...')
     if App == 'ComfyUi':
-        pass
+        ComfyUi(cwd=Cwd, file=File, args=Args).launch()
     elif App == 'A1111':
         A1111(cwd=Cwd, file=File, args=Args).launch()
+    elif App == 'SDNext':
+        SDNext(cwd=Cwd, file=File, args=Args).launch()
 

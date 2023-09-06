@@ -19,9 +19,11 @@ def is_installed(name:str,pkg_version:str or None=None):
     
     return out
 
-def run(cmd:str,*, cwd=Dir, quiet=False):
+def run(cmd:str,*, cwd=Dir, quiet=False, msg=None):
     stdout = subprocess.DEVNULL if quiet == True else None
     stderr = subprocess.STDOUT if quiet == True else None
+    if msg:
+        print(msg)
     return subprocess.run(args=cmd, cwd=cwd, shell=True, stdout=stdout, stderr=stderr)
 
 def py(command, *, cwd=Dir, quiet=False):
@@ -37,3 +39,6 @@ def run_pip(install_syntex:str):
 
 def get_path(path):
     return Path.join(WORKSPACE, path)
+
+def get_cwd():
+    return WORKSPACE
