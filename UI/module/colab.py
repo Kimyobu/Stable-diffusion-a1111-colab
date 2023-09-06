@@ -28,6 +28,7 @@ class A1111:
         elif cf is True:
             run_pip('pytorch-lightning==1.6.5')
             run_pip('torchmetrics==0.11.0')
+            run_pip('pydantic==1.10.5')
             run(f'COMMANDLINE_ARGS="{self.args}" REQS_FILE="requirements.txt" python {self.file}', cwd=self.cwd)
 
 class ComfyUi:
