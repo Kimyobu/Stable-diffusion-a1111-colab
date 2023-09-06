@@ -7,6 +7,7 @@ import socket
 from .utils import run, py, get_path, get_cwd, run_pip
 
 WORKSPACE = '/content'
+PROJECT = Path.dirname(get_cwd())
 
 def get_path(path:str):
     return Path.join(WORKSPACE, path)
@@ -29,6 +30,7 @@ class A1111:
             run_pip('pytorch-lightning==1.6.5')
             run_pip('torchmetrics==0.11.0')
             run_pip('pydantic==1.10.5')
+            run_pip('pillow==9.5.0')
             run(f'COMMANDLINE_ARGS="{self.args}" REQS_FILE="requirements.txt" python {self.file}', cwd=self.cwd)
 
 class ComfyUi:
