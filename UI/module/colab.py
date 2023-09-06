@@ -4,7 +4,7 @@ import os
 import time
 import threading
 import socket
-from .utils import run, py, get_path, get_cwd
+from .utils import run, py, get_path, get_cwd, run_pip
 
 WORKSPACE = '/content'
 
@@ -26,6 +26,8 @@ class A1111:
         if cf is False:
             print('Can`t Find launch.py [A1111]')
         elif cf is True:
+            run_pip('pytorch-lightning==1.6.5')
+            run_pip('torchmetrics==0.11.0')
             run(f'COMMANDLINE_ARGS="{self.args}" REQS_FILE="requirements.txt" python {self.file}', cwd=self.cwd)
 
 class ComfyUi:
