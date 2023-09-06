@@ -45,7 +45,7 @@ class ComfyUi:
         if cf is False:
             print('Can`t Find main.py [ComfyUI]')
         elif cf is True:
-            run('dpkg cloudflared-linux-amd64.deb', cwd=get_cwd(), quiet=True, msg='Install Cloudflared for LinuxAMD64')
+            run('dpkg -i cloudflared-linux-amd64.deb', cwd=get_cwd(), quiet=True, msg='Install Cloudflared for LinuxAMD64')
             def cloudflare_tunnel(port):
                 while True:
                     time.sleep(0.5)
