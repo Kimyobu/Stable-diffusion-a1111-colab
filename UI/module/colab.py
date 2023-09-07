@@ -40,7 +40,7 @@ class A1111:
             run_pip('torchmetrics==0.11.0')
             run_pip('pydantic==1.10.5')
             run_pip('pillow==9.5.0')
-            git_clone_from_file(Path.join(PROJECT, 'SD/extensions.txt'), Path.join(self.cwd), 'extensions')
+            git_clone_from_file(Path.join(PROJECT, 'SD/extensions.txt'), Path.join(self.cwd, 'extensions'))
             run(f'COMMANDLINE_ARGS="{self.args}" REQS_FILE="requirements.txt" python {self.file}', cwd=self.cwd)
 
 class ComfyUi:
