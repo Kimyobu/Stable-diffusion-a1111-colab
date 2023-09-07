@@ -15,6 +15,15 @@ def get_path(path:str):
 def check(path:str,isfile=False):
     return Path.isfile(path) if isfile is True else Path.isdir(path)
 
+def git_clone_from_file(file, cwd):
+    op = open(file, 'r')
+    r = op.read()
+    op.close()
+    for x in r.split('\n'):
+        name = Path.splitext(Path.basename(x))[0]
+        if check(Path.join(cwd, name)) is False:
+            run(f'git clone {x} {name}', cwd=cwd, msg=f'Install extension {name}')
+
 class A1111:
     def __init__(self,*, cwd=None, file=None, args=None):
         self.cwd = cwd or get_path('A1111')
@@ -31,6 +40,7 @@ class A1111:
             run_pip('torchmetrics==0.11.0')
             run_pip('pydantic==1.10.5')
             run_pip('pillow==9.5.0')
+            git_clone_from_file(Path.join(PROJECT, 'SD/extensions.txt'), Path.join(self.cwd), 'extensions')
             run(f'COMMANDLINE_ARGS="{self.args}" REQS_FILE="requirements.txt" python {self.file}', cwd=self.cwd)
 
 class ComfyUi:
