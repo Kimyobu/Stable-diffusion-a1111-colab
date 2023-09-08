@@ -4,9 +4,10 @@ import os
 import time
 import threading
 import socket
-from .utils import run, py, get_path, get_cwd, run_pip
+from .utils import run, py, get_cwd, run_pip
 
 WORKSPACE = '/content'
+DRIVE = '/content/drive/MyDrive/kim-colab-project'
 PROJECT = Path.dirname(get_cwd())
 
 def get_path(path:str):
@@ -25,7 +26,9 @@ def git_clone_from_file(file, cwd):
             run(f'git clone {x} {name}', cwd=cwd, msg=f'Install extension {name}')
 
 class A1111:
-    def __init__(self,*, cwd=None, file=None, args=None):
+    def __init__(self,*, cwd=None, file=None, args=None, use_drive=False):
+        if use_drive is True:
+            WORKSPACE = DRIVE
         self.cwd = cwd or get_path('A1111')
         self.file = file or get_path('A1111/launch.py')
         self.args = args or ''
@@ -44,7 +47,9 @@ class A1111:
             run(f'COMMANDLINE_ARGS="{self.args}" REQS_FILE="requirements.txt" python {self.file}', cwd=self.cwd)
 
 class ComfyUi:
-    def __init__(self,*, cwd=None, file=None, args=None):
+    def __init__(self,*, cwd=None, file=None, args=None, use_drive=False):
+        if use_drive is True:
+            WORKSPACE = DRIVE
         self.cwd = cwd or get_path('ComfyUI')
         self.file = file or get_path('ComfyUI/main.py')
         self.args = args or ''
@@ -75,7 +80,9 @@ class ComfyUi:
             run(f'python {self.file} {self.args}', cwd=self.cwd)
 
 class SDNext:
-    def __init__(self,*, cwd=None, file=None, args=None):
+    def __init__(self,*, cwd=None, file=None, args=None, use_drive=False):
+        if use_drive is True:
+            WORKSPACE = DRIVE
         self.cwd = cwd or get_path('SDNext')
         self.file = file or get_path('SDNext/launch.py')
         self.args = args or ''

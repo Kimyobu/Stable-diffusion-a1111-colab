@@ -1,0 +1,1 @@
+function copy(elem) {navigator.clipboard.writeText(elem.textContent)}

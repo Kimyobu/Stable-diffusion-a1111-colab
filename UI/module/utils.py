@@ -4,9 +4,15 @@ import sys
 import os
 import os.path as Path
 from importlib.metadata import version
+from google.colab import drive
 
 Dir = Path.dirname(Path.realpath(__file__))
 WORKSPACE = Path.dirname(Dir)
+
+def mount_drive(path='/content/drive'):
+    if Path.isdir(path) is False:
+        print('Mounting google drive...')
+        drive.mount(path, force_remount=True)
 
 def is_installed(name:str,pkg_version:str or None=None):
     out = False
