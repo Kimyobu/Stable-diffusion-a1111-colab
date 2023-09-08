@@ -34,7 +34,7 @@ class A1111:
         self.args = args or ''
     def launch(self):
         if check(self.cwd) is False:
-            run('git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git A1111', cwd=WORKSPACE)
+            run('git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git A1111', cwd=Path.dirname(self.cwd))
         cf = check(self.file,isfile=True)
         if cf is False:
             print('Can`t Find launch.py [A1111]')
@@ -55,7 +55,7 @@ class ComfyUi:
         self.args = args or ''
     def launch(self):
         if check(self.cwd) is False:
-            run('git clone https://github.com/comfyanonymous/ComfyUI.git ComfyUI', cwd=WORKSPACE)
+            run('git clone https://github.com/comfyanonymous/ComfyUI.git ComfyUI', Path.dirname(self.cwd))
         cf = check(self.file,isfile=True)
         if cf is False:
             print('Can`t Find main.py [ComfyUI]')
@@ -88,7 +88,7 @@ class SDNext:
         self.args = args or ''
     def launch(self):
         if check(self.cwd) is False:
-            run('git clone https://github.com/vladmandic/automatic.git SDNext', cwd=WORKSPACE)
+            run('git clone https://github.com/vladmandic/automatic.git SDNext', Path.dirname(self.cwd))
         cf = check(self.file,isfile=True)
         if cf is False:
             print('Can`t Find launch.py [SDNext]')
