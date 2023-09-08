@@ -30,6 +30,8 @@ def run(cmd:str,*, cwd=Dir, quiet=False, msg=None):
     stderr = subprocess.STDOUT if quiet == True else None
     if msg:
         print(msg)
+    if Path.isdir(cwd) is False:
+        os.makedirs(cwd, exist_ok=True)
     return subprocess.run(args=cmd, cwd=cwd, shell=True, stdout=stdout, stderr=stderr)
 
 def py(command, *, cwd=Dir, quiet=False):
