@@ -49,6 +49,11 @@ class A1111:
             run_pip('pydantic==1.10.5')
             run_pip('pillow==9.5.0')
             git_clone_from_file(Path.join(PROJECT, 'SD/extensions.txt'), Path.join(self.cwd, 'extensions'))
+
+            #CodeFormer Pack Fix
+            codeformer = get_path('A1111/repositories/CodeFormer')
+            run('git checkout -f c5b4593074ba6214284d6acd5f1719b6c5d739af', cwd=codeformer)
+
             run(f'COMMANDLINE_ARGS="{self.args}" REQS_FILE="requirements.txt" python {self.file}', cwd=self.cwd)
 
 class ComfyUi:
