@@ -52,7 +52,8 @@ class A1111:
 
             #CodeFormer Pack Fix
             codeformer = get_path('A1111/repositories/CodeFormer')
-            run('git checkout -f c5b4593074ba6214284d6acd5f1719b6c5d739af', cwd=codeformer)
+            if check(codeformer) is True:
+                run('git checkout -f c5b4593074ba6214284d6acd5f1719b6c5d739af', cwd=codeformer)
 
             run(f'COMMANDLINE_ARGS="{self.args}" REQS_FILE="requirements.txt" python {self.file}', cwd=self.cwd)
 
