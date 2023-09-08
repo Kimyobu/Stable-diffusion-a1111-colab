@@ -6,12 +6,17 @@ import threading
 import socket
 from .utils import run, py, get_cwd, run_pip
 
-WORKSPACE = '/content'
-DRIVE = '/content/drive/MyDrive/kim-colab-project'
+Config = {
+    "WS": "/content",
+    "DRIVE": "/content/drive/MyDrive/kim-colab-project"
+}
+
+WORKSPACE = Config.get("WS")
+DRIVE = Config.get("DRIVE")
 PROJECT = Path.dirname(get_cwd())
 
-def get_path(path:str):
-    return Path.join(WORKSPACE, path)
+def get_path(path:str=None):
+    return Path.join(Config.get("WS"), path) if path is not None else Config.get("WS")
 
 def check(path:str,isfile=False):
     return Path.isfile(path) if isfile is True else Path.isdir(path)
@@ -28,7 +33,7 @@ def git_clone_from_file(file, cwd):
 class A1111:
     def __init__(self,*, cwd=None, file=None, args=None, use_drive=False):
         if use_drive is True:
-            WORKSPACE = DRIVE
+            Config['WS'] = DRIVE
         self.cwd = cwd or get_path('A1111')
         self.file = file or get_path('A1111/launch.py')
         self.args = args or ''
@@ -49,7 +54,7 @@ class A1111:
 class ComfyUi:
     def __init__(self,*, cwd=None, file=None, args=None, use_drive=False):
         if use_drive is True:
-            WORKSPACE = DRIVE
+            Config['WS'] = DRIVE
         self.cwd = cwd or get_path('ComfyUI')
         self.file = file or get_path('ComfyUI/main.py')
         self.args = args or ''
@@ -82,7 +87,7 @@ class ComfyUi:
 class SDNext:
     def __init__(self,*, cwd=None, file=None, args=None, use_drive=False):
         if use_drive is True:
-            WORKSPACE = DRIVE
+            Config['WS'] = DRIVE
         self.cwd = cwd or get_path('SDNext')
         self.file = file or get_path('SDNext/launch.py')
         self.args = args or ''
