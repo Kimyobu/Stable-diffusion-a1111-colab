@@ -16,26 +16,28 @@ def mount_drive(path='/content/drive'):
 
 def is_installed(name: str, pkg_version: str or None = None, operator: str = '=='):
     out = False
-    package = importlib.util.find_spec(name)
-    if package is not None:
-        out = True
-        if pkg_version is not None:
-            ver = version(package.name)
-            if operator == '==':
-                out = (ver == pkg_version)
-            elif operator == '>=':
-                out = (ver >= pkg_version)
-            elif operator == '<=':
-                out = (ver <= pkg_version)
-            elif operator == '<':
-                out = (ver < pkg_version)
-            elif operator == '>':
-                out = (ver > pkg_version)
-            elif operator == '!=':
-                out = (ver != pkg_version)
-            elif operator == '~=':
-                out = (pkg_version in package.requires)
-    
+    try:
+        package = importlib.util.find_spec(name)
+        if package is not None:
+            out = True
+            if pkg_version is not None:
+                ver = version(package.name)
+                if operator == '==':
+                    out = (ver == pkg_version)
+                elif operator == '>=':
+                    out = (ver >= pkg_version)
+                elif operator == '<=':
+                    out = (ver <= pkg_version)
+                elif operator == '<':
+                    out = (ver < pkg_version)
+                elif operator == '>':
+                    out = (ver > pkg_version)
+                elif operator == '!=':
+                    out = (ver != pkg_version)
+                elif operator == '~=':
+                    out = (pkg_version in package.requires)
+    except ModuleNotFoundError:
+        pass
     return out
 
 def run(cmd:str,*, cwd=Dir, quiet=False, msg=None):
