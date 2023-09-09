@@ -28,14 +28,14 @@ def is_installed(name:str,pkg_version:str or None=None):
 def run(cmd:str,*, cwd=Dir, quiet=False, msg=None):
     stdout = subprocess.DEVNULL if quiet == True else None
     stderr = subprocess.STDOUT if quiet == True else None
-    if msg:
+    if msg is not None:
         print(msg)
     if Path.isdir(cwd) is False:
         os.makedirs(cwd, exist_ok=True)
     return subprocess.run(args=cmd, cwd=cwd, shell=True, stdout=stdout, stderr=stderr)
 
-def py(command, *, cwd=Dir, quiet=False):
-    return run(f'{sys.executable} {command}', cwd=cwd, quiet=quiet)
+def py(command, *, cwd=Dir, quiet=False, msg=None):
+    return run(f'{sys.executable} {command}', cwd=cwd, quiet=quiet, msg=msg)
 
 def run_pip(install_syntex:str):
     parse = install_syntex.split('==')
