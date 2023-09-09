@@ -88,20 +88,23 @@ class ComfyUi:
         if cf is False:
             print('Can`t Find main.py [ComfyUI]')
         elif cf is True:
+            run('git pull', cwd=self.cwd, msg='Checking for Update...')
             #Extra
             custom_node = self.get_path('custom_nodes')
             manager = Path.join(custom_node, 'ComfyUI-Manager')
-            if check(manager) is True:
-                run('git fetch --all', cwd=manager, quiet=True, msg='Checking ComfyUI-Manager Update')
-                run('git pull', cwd=manager)
-            else:
+            if check(manager) is False:
                 run('git clone https://github.com/ltdrdata/ComfyUI-Manager.git ComfyUI-Manager', cwd=custom_node, quiet=True, msg='Cloning ComfyUI-Manager')
+            print('Checking All Nodes Updates...')
+            nodes = os.listdir(custom_node)
+            for x in nodes:
+                x = Path.join(custom_node, x)
+                run('git pull', cwd=x, msg=f'Checking {Path.basename(x)}')
 
             #Requirements
             run('dpkg -i cloudflared-linux-amd64.deb', cwd=get_cwd(), quiet=True, msg='\033[39mInstall Cloudflared for LinuxAMD64')
             py('-m pip install xformers!=0.0.18 -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118 --extra-index-url https://download.pytorch.org/whl/cu117', cwd=self.cwd, quiet=True, msg="Installing Dependencies @ComfyUI\n... Waiting...")
             print('Install All Nodes Requirements...')
-            for x in os.listdir(custom_node):
+            for x in nodes:
                 x = Path.join(custom_node, x)
                 req_file = Path.join(x, 'requirements.txt')
                 if check(req_file, isfile=True):

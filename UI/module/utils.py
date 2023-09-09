@@ -67,7 +67,7 @@ def run_pip(install_syntax: str):
         name = package_info[0].strip()
         version = package_info[1].strip() if len(package_info) > 1 else None
 
-        if is_installed(name, version, operator) is False:
+        if is_installed(name, version, operator) is False and name != '':
             print(f'Install {install_syntax}')
             py(f'-m pip install {install_syntax}', quiet=True)
 
