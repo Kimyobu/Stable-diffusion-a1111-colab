@@ -14,14 +14,27 @@ def mount_drive(path='/content/drive'):
         print('Mounting google drive...')
         drive.mount(path, force_remount=True)
 
-def is_installed(name:str,pkg_version:str or None=None):
+def is_installed(name: str, pkg_version: str or None = None, operator: str = '=='):
     out = False
     package = importlib.util.find_spec(name)
     if package is not None:
         out = True
         if pkg_version is not None:
-            if version(package.name) != pkg_version:
-                out = False
+            ver = version(package.name)
+            if operator == '==':
+                out = (ver == pkg_version)
+            elif operator == '>=':
+                out = (ver >= pkg_version)
+            elif operator == '<=':
+                out = (ver <= pkg_version)
+            elif operator == '<':
+                out = (ver < pkg_version)
+            elif operator == '>':
+                out = (ver > pkg_version)
+            elif operator == '!=':
+                out = (ver != pkg_version)
+            elif operator == '~=':
+                out = (pkg_version in package.requires)
     
     return out
 
@@ -37,13 +50,23 @@ def run(cmd:str,*, cwd=Dir, quiet=False, msg=None):
 def py(command, *, cwd=Dir, quiet=False, msg=None):
     return run(f'{sys.executable} {command}', cwd=cwd, quiet=quiet, msg=msg)
 
-def run_pip(install_syntex:str):
-    parse = install_syntex.split('==')
-    name = parse[0]
-    ver = parse[1] if len(parse) > 1 else None
-    if not is_installed(name,ver):
-        print(f'Install {install_syntex}')
-        py(f'-m pip install {install_syntex}', quiet=True)
+def run_pip(install_syntax: str):
+    operators = ['==', '>=', '<=', '<', '>', '!=']
+    operator = None
+
+    for op in operators:
+        if op in install_syntax:
+            operator = op
+            break
+
+    if operator is not None:
+        package_info = install_syntax.split(operator)
+        name = package_info[0].strip()
+        version = package_info[1].strip() if len(package_info) > 1 else None
+
+        if is_installed(name, version, operator) is False:
+            print(f'Install {install_syntax}')
+            py(f'-m pip install {install_syntax}', quiet=True)
 
 def get_path(path):
     return Path.join(WORKSPACE, path)

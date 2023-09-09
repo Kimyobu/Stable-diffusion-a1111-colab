@@ -105,7 +105,7 @@ class ComfyUi:
                 x = Path.join(custom_node, x)
                 req_file = Path.join(x, 'requirements.txt')
                 if check(req_file, isfile=True):
-                    print(f'Install Requirements for {x}')
+                    print(f'Install Requirements for {Path.basename(x)}')
                     install_req(req_file)
 
             def cloudflare_tunnel(port):
