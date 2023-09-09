@@ -101,10 +101,9 @@ class ComfyUi:
             run('dpkg -i cloudflared-linux-amd64.deb', cwd=get_cwd(), quiet=True, msg='\033[39mInstall Cloudflared for LinuxAMD64')
             py('-m pip install xformers!=0.0.18 -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118 --extra-index-url https://download.pytorch.org/whl/cu117', cwd=self.cwd, quiet=True, msg="Installing Dependencies @ComfyUI\n... Waiting...")
             print('Install All Nodes Requirements...')
-            for x in custom_node:
+            for x in os.listdir(custom_node):
                 x = Path.join(custom_node, x)
                 req_file = Path.join(x, 'requirements.txt')
-                print(req_file)
                 if check(req_file, isfile=True):
                     print(f'Install Requirements for {x}')
                     install_req(req_file)
