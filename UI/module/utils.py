@@ -52,14 +52,13 @@ def py(command, *, cwd=Dir, quiet=False, msg=None):
 
 def run_pip(install_syntax: str):
     operators = ['<', '>', '==', '>=', '<=' , '!=']
-    operator = None
     found = []
 
     for op in operators:
         if op in install_syntax:
             found.append(op)
 
-    operator = found[-1];
+    operator = found[-1] if len(found) > 0 else ''
 
     if operator is not None:
         package_info = install_syntax.split(operator)
