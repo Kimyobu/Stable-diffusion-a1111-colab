@@ -98,7 +98,8 @@ class ComfyUi:
             nodes = os.listdir(custom_node)
             for x in nodes:
                 x = Path.join(custom_node, x)
-                run('git pull', cwd=x, msg=f'Checking {Path.basename(x)}')
+                if check(x) is True:
+                    run('git pull', cwd=x, msg=f'Checking {Path.basename(x)}')
 
             #Requirements
             run('dpkg -i cloudflared-linux-amd64.deb', cwd=get_cwd(), quiet=True, msg='\033[39mInstall Cloudflared for LinuxAMD64')
@@ -107,7 +108,7 @@ class ComfyUi:
             for x in nodes:
                 x = Path.join(custom_node, x)
                 req_file = Path.join(x, 'requirements.txt')
-                if check(req_file, isfile=True):
+                if check(req_file, isfile=True) is True:
                     print(f'Install Requirements for {Path.basename(x)}')
                     install_req(req_file)
 
