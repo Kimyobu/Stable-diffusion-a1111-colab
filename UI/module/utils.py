@@ -58,7 +58,7 @@ def run_pip(install_syntax: str):
         if op in install_syntax:
             found.append(op)
 
-    operator = found[-1] if len(found) > 0 else ''
+    operator = found[-1] if len(found) > 0 else '=='
 
     if operator is not None:
         package_info = install_syntax.split(operator)
