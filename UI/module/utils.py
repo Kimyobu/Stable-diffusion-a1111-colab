@@ -51,13 +51,15 @@ def py(command, *, cwd=Dir, quiet=False, msg=None):
     return run(f'{sys.executable} {command}', cwd=cwd, quiet=quiet, msg=msg)
 
 def run_pip(install_syntax: str):
-    operators = ['==', '>=', '<=', '<', '>', '!=']
+    operators = ['<', '>', '==', '>=', '<=' , '!=']
     operator = None
+    found = []
 
     for op in operators:
         if op in install_syntax:
-            operator = op
-            break
+            found.append(op)
+
+    operator = found[-1];
 
     if operator is not None:
         package_info = install_syntax.split(operator)
