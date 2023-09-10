@@ -37,14 +37,29 @@ def install_req(file):
     for x in r.split('\n'):
         run_pip(x)
 
+def git_pull(cwd:str, force=False):
+    if force is True:
+        run('git reset --hard origin', cwd=cwd)
+    run('git pull', cwd=cwd)
+
+def update_exts(dir:str, force=False):
+    if check(dir) is True:
+        for x in os.listdir(dir):
+            x = Path.join(dir, x)
+            git_pull(x, force)
+
 class A1111:
-    def __init__(self,*, cwd=None, file=None, args=None, use_drive=False, install_exts=False):
+    def __init__(self,*, cwd=None, file=None, args=None, use_drive=False, install_exts=False, update=False, update_exts=False, force_update=False, install_req=False):
         if use_drive is True:
             Config['WS'] = DRIVE
         self.cwd = cwd or get_path('A1111')
         self.file = file or get_path('A1111/launch.py')
         self.args = args or ''
         self.install_exts = install_exts
+        self.update = update
+        self.update_exts = update_exts
+        self.force_update = force_update
+        self.install_req = install_req
     def get_path(self, path:str=None):
         return Path.join(self.cwd, path) if path is not None else self.cwd
     def launch(self):
@@ -54,15 +69,28 @@ class A1111:
         if cf is False:
             print('Can`t Find launch.py [A1111]')
         elif cf is True:
-            run_pip('pytorch-lightning==1.6.5')
-            run_pip('torchmetrics==0.11.0')
-            run_pip('pydantic==1.10.5')
-            run_pip('pillow==9.5.0')
-            run_pip('open-clip-torch==2.20.0')
+
+            extension = self.get_path('extensions')
+            #Update
+            if self.update is True:
+                print('Checking for Update...')
+                git_pull(self.cwd, self.force_update)
+            if self.update_exts is True:
+                print('\033[39mChecking for Extension Update...')
+                update_exts(extension, self.force_update)
+
+            #Requirements
+            print('\033[39m|')
+            if self.install_req is True:
+                run_pip('pytorch-lightning==1.6.5')
+                run_pip('torchmetrics==0.11.0')
+                run_pip('pydantic==1.10.5')
+                run_pip('pillow==9.5.0')
+                run_pip('open-clip-torch==2.20.0')
 
             if self.install_exts:
                 print('Install Recommender Extensions...')
-                git_clone_from_file(Path.join(PROJECT, 'SD/extensions.txt'), self.get_path('extensions'))
+                git_clone_from_file(Path.join(PROJECT, 'SD/extensions.txt'), extension)
 
             #CodeFormer Pack Fix
             codeformer = self.get_path('repositories/CodeFormer')
@@ -72,13 +100,17 @@ class A1111:
             run(f'COMMANDLINE_ARGS="{self.args}" REQS_FILE="requirements.txt" python {self.file}', cwd=self.cwd)
 
 class ComfyUi:
-    def __init__(self,*, cwd=None, file=None, args=None, use_drive=False, install_exts=False):
+    def __init__(self,*, cwd=None, file=None, args=None, use_drive=False, install_exts=False, update=False, update_exts=False, force_update=False, install_req=False):
         if use_drive is True:
             Config['WS'] = DRIVE
         self.cwd = cwd or get_path('ComfyUI')
         self.file = file or get_path('ComfyUI/main.py')
         self.args = args or ''
         self.install_exts = install_exts
+        self.update = update
+        self.update_exts = update_exts
+        self.force_update = force_update
+        self.install_req = install_req
     def get_path(self, path:str=None):
         return Path.join(self.cwd, path) if path is not None else self.cwd
     def launch(self):
@@ -88,30 +120,36 @@ class ComfyUi:
         if cf is False:
             print('Can`t Find main.py [ComfyUI]')
         elif cf is True:
-            run('git pull', cwd=self.cwd, msg='Checking for Update...')
-            #Extra
             custom_node = self.get_path('custom_nodes')
             manager = Path.join(custom_node, 'ComfyUI-Manager')
+
+            #Update
+            if self.update is True:
+                print('Checking for Update...')
+                git_pull(self.cwd, self.force_update)
+            if self.update_exts is True:
+                print('\033[39mChecking for Custom_node Update...')
+                update_exts(custom_node, self.force_update)
+            
+            #Extra
             if check(manager) is False:
                 run('git clone https://github.com/ltdrdata/ComfyUI-Manager.git ComfyUI-Manager', cwd=custom_node, quiet=True, msg='Cloning ComfyUI-Manager')
             print('Checking All Nodes Updates...')
             nodes = os.listdir(custom_node)
-            for x in nodes:
-                x = Path.join(custom_node, x)
-                if check(x) is True:
-                    run('git pull', cwd=x, msg=f'Checking {Path.basename(x)}')
 
             #Requirements
-            run('dpkg -i cloudflared-linux-amd64.deb', cwd=get_cwd(), quiet=True, msg='\033[39mInstall Cloudflared for LinuxAMD64')
-            py('-m pip install xformers!=0.0.18 -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118 --extra-index-url https://download.pytorch.org/whl/cu117', cwd=self.cwd, quiet=True, msg="Installing Dependencies @ComfyUI\n... Waiting...")
-            print('Install All Nodes Requirements...')
-            for x in nodes:
-                x = Path.join(custom_node, x)
-                req_file = Path.join(x, 'requirements.txt')
-                if check(req_file, isfile=True) is True:
-                    print(f'Install Requirements for {Path.basename(x)}')
-                    install_req(req_file)
+            if self.install_req is True:
+                run('dpkg -i cloudflared-linux-amd64.deb', cwd=get_cwd(), quiet=True, msg='\033[39mInstall Cloudflared for LinuxAMD64')
+                py('-m pip install xformers!=0.0.18 -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118 --extra-index-url https://download.pytorch.org/whl/cu117', cwd=self.cwd, quiet=True, msg="Installing Dependencies @ComfyUI\n... Waiting...")
+                print('Install All Nodes Requirements...')
+                for x in nodes:
+                    x = Path.join(custom_node, x)
+                    req_file = Path.join(x, 'requirements.txt')
+                    if check(req_file, isfile=True) is True:
+                        print(f'Install Requirements for {Path.basename(x)}')
+                        install_req(req_file)
 
+            #Launch WebUI
             def cloudflare_tunnel(port):
                 while True:
                     time.sleep(0.5)
@@ -131,13 +169,17 @@ class ComfyUi:
             run(f'python {self.file} {self.args}', cwd=self.cwd)
 
 class SDNext:
-    def __init__(self,*, cwd=None, file=None, args=None, use_drive=False, install_exts=False):
+    def __init__(self,*, cwd=None, file=None, args=None, use_drive=False, install_exts=False, update=False, update_exts=False, force_update=False, install_req=False):
         if use_drive is True:
             Config['WS'] = DRIVE
         self.cwd = cwd or get_path('SDNext')
         self.file = file or get_path('SDNext/launch.py')
         self.args = args or ''
         self.install_exts = install_exts
+        self.update = update
+        self.update_exts = update_exts
+        self.force_update = force_update
+        self.install_req = install_req
     def get_path(self, path:str=None):
         return Path.join(self.cwd, path) if path is not None else self.cwd
     def launch(self):
@@ -147,4 +189,20 @@ class SDNext:
         if cf is False:
             print('Can`t Find launch.py [SDNext]')
         elif cf is True:
+            extension = self.get_path('extensions')
+            #Update
+            if self.update is True:
+                print('Checking for Update...')
+                git_pull(self.cwd, self.force_update)
+            if self.update_exts is True:
+                print('\033[39mChecking for Extension Update...')
+                update_exts(extension, self.force_update)
+            print('\033[39m|')
+
+            #Extra
+            if self.install_exts:
+                print('Install Recommender Extensions...')
+                git_clone_from_file(Path.join(PROJECT, 'SD/extensions.txt'), extension)
+            
+            #Launch WebUI
             run(f'COMMANDLINE_ARGS="{self.args}" python {self.file}', cwd=self.cwd)
