@@ -42,10 +42,10 @@ def git_pull(cwd:str, force=False):
         run('git reset --hard origin', cwd=cwd)
     run('git pull', cwd=cwd)
 
-def update_exts(dir:str, force=False):
-    if check(dir) is True and check(dir, True) is False:
-        for x in os.listdir(dir):
-            x = Path.join(dir, x)
+def update_exts(directory:str, force=False):
+    if check(directory) is True:
+        for x in os.listdir(directory):
+            x = Path.join(directory, x)
             git_pull(x, force)
 
 class A1111:
