@@ -76,3 +76,6 @@ def get_path(path):
 
 def get_cwd():
     return WORKSPACE
+
+def isTrue(value):
+    return True if value == "True" else False if value == "False" else value is True

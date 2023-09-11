@@ -1,6 +1,6 @@
 import argparse
 from module.colab import ComfyUi, A1111, SDNext
-from module.utils import mount_drive
+from module.utils import mount_drive, isTrue
 
 parser = argparse.ArgumentParser(description="")
 
@@ -21,12 +21,12 @@ App = args.app
 Cwd = args.cwd
 File = args.file
 Args = args.args
-Use_drive = bool(args.use_google_drive)
-Install_exts = bool(args.install_extensions)
-Update = bool(args.update)
-Update_exts = bool(args.update_exts)
-Force_update = bool(args.force_update)
-Install_req = bool(args.install_req)
+Use_drive = isTrue(args.use_google_drive)
+Install_exts = isTrue(args.install_extensions)
+Update = isTrue(args.update)
+Update_exts = isTrue(args.update_exts)
+Force_update = isTrue(args.force_update)
+Install_req = isTrue(args.install_req)
 
 if Use_drive is True:
     mount_drive()
