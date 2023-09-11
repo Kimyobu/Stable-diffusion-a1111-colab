@@ -115,7 +115,7 @@ class ComfyUi:
         return Path.join(self.cwd, path) if path is not None else self.cwd
     def launch(self):
         if check(self.cwd) is False:
-            run('git clone https://github.com/comfyanonymous/ComfyUI.git ComfyUI', Path.dirname(self.cwd))
+            run('git clone https://github.com/comfyanonymous/ComfyUI.git ComfyUI', cwd=Path.dirname(self.cwd))
         cf = check(self.file,isfile=True)
         if cf is False:
             print('Can`t Find main.py [ComfyUI]')
@@ -184,7 +184,7 @@ class SDNext:
         return Path.join(self.cwd, path) if path is not None else self.cwd
     def launch(self):
         if check(self.cwd) is False:
-            run('git clone https://github.com/vladmandic/automatic.git SDNext', Path.dirname(self.cwd))
+            run('git clone https://github.com/vladmandic/automatic.git SDNext', cwd=Path.dirname(self.cwd))
         cf = check(self.file,isfile=True)
         if cf is False:
             print('Can`t Find launch.py [SDNext]')
