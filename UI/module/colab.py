@@ -60,7 +60,6 @@ class A1111:
         self.update_exts = update_exts
         self.force_update = force_update
         self.install_req = install_req
-        print(update)
     def get_path(self, path:str=None):
         return Path.join(self.cwd, path) if path is not None else self.cwd
     def launch(self):
@@ -73,7 +72,6 @@ class A1111:
 
             extension = self.get_path('extensions')
             #Update
-            print(self.update)
             if self.update is True:
                 print('Checking for Update...')
                 git_pull(self.cwd, self.force_update)
