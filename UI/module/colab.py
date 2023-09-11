@@ -72,6 +72,7 @@ class A1111:
 
             extension = self.get_path('extensions')
             #Update
+            print(self.update)
             if self.update is True:
                 print('Checking for Update...')
                 git_pull(self.cwd, self.force_update)
